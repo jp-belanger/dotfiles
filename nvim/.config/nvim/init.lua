@@ -15,8 +15,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.runtimepath:prepend(lazypath)
 
-require("lazy").setup("plugins")
-
--- load configs
-require("keymaps")
-require("settings")
+require("lazy").setup({ import = "custom/plugins" }, {
+  change_detection = {
+    notify = false,
+  },
+})

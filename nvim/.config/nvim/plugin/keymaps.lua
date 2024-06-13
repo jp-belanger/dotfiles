@@ -3,15 +3,15 @@ local function map(mode, shortcut, command)
 end
 
 local function nmap(shortcut, command)
-  map('n', shortcut, command)
+  map("n", shortcut, command)
 end
 
 local function imap(shortcut, command)
-  map('i', shortcut, command)
+  map("i", shortcut, command)
 end
 
 local function tmap(shortcut, command)
-  map('t', shortcut, command)
+  map("t", shortcut, command)
 end
 
 -- jk to escape insert mode

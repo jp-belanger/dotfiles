@@ -83,6 +83,9 @@ z4h bindkey z4h-cd-forward Alt+Right  # cd into the next directory
 z4h bindkey z4h-cd-up      Alt+Up     # cd into the parent directory
 z4h bindkey z4h-cd-down    Alt+Down   # cd into a child directory
 
+zstyle ':z4h:fzf-dir-history' fzf-bindings tab:repeat
+zstyle ':z4h:fzf-complete' fzf-bindings tab:repeat
+zstyle ':z4h:cd-down' fzf-bindings tab:repeat
 
 # Autoload functions.
 autoload -Uz zmv

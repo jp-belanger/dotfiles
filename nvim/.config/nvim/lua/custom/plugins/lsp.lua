@@ -82,6 +82,7 @@ return {
           vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { buffer = 0 })
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = 0 })
+          vim.keymap.set("i", '<C-s>', vim.lsp.buf.signature_help, { buffer = 0})
           vim.diagnostic.config { virtual_text = false } -- remove in-line virtual-text diagnostics
 
           local filetype = vim.bo[bufnr].filetype

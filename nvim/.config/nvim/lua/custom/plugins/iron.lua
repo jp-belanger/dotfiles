@@ -7,6 +7,7 @@ return {
         config = {
           close_window_on_exit = true,
           repl_open_cmd = "botright vertical split",
+          ignore_blank_lines = true,
           repl_definition = {
             python = require("iron.fts.python").ipython,
           },

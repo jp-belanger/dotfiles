@@ -82,7 +82,7 @@ return {
           vim.keymap.set("n", "<leader>vd", vim.diagnostic.open_float, { buffer = 0 })
           vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = 0 })
           vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = 0 })
-          vim.keymap.set("i", '<C-s>', vim.lsp.buf.signature_help, { buffer = 0})
+          vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, { buffer = 0 })
           vim.diagnostic.config { virtual_text = false } -- remove in-line virtual-text diagnostics
 
           local filetype = vim.bo[bufnr].filetype
@@ -109,18 +109,11 @@ return {
           python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
           rust = { "rustfmt" },
         },
+        format_on_save = {
+          timeout_ms = 500,
+          lsp_format = "fallback",
+        },
       }
-      vim.api.nvim_create_user_command("Format", function(args)
-        local range = nil
-        if args.count ~= -1 then
-          local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-          range = {
-            start = { args.line1, 0 },
-            ["end"] = { args.line2, end_line:len() },
-          }
-        end
-        require("conform").format { async = true, lsp_fallback = true, range = range }
-      end, { range = true })
     end,
   },
 }

@@ -142,10 +142,12 @@ alias gl="git log"
 alias gbr="git branch"
 alias gw="git worktree"
 # tmux
-alias ktm="tmux kill-server"
-alias ltm="tmux list-sessions"
-alias stm="tmux switch-client -t"
+alias tmk="tmux kill-server"
+alias tml="tmux list-sessions"
+alias tms="tmux switch-client -t"
 alias tmd="tmux detach-client"
+alias tma="tmux attach-session -t"
+alias tmn="tmux new-session -s"
 
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 setopt glob_dots             # no special treatment for file names with a leading dot

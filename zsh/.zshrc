@@ -50,8 +50,8 @@ zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
 z4h init || return
 
 # Extend PATH.
-path=(~/bin $path)
 path=(~/.cargo/bin $path)
+path=($path /opt/nvim-linux64/bin)
 
 # Export environment variables.
 export GPG_TTY=$TTY

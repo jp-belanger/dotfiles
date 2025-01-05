@@ -9,7 +9,10 @@ return {
           repl_open_cmd = "botright vertical split",
           ignore_blank_lines = true,
           repl_definition = {
-            python = require("iron.fts.python").ipython,
+            python = {
+              command = { "ipython", "--no-autoindent" },
+              require("iron.fts.common").bracketed_paste_python,
+            },
           },
         },
         keymaps = {

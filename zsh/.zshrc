@@ -96,7 +96,6 @@ function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
 # python environment
-[[ -f "$HOME/.rye/env" ]] && . "$HOME/.rye/env"
 function ve() {
   if [[ -v VIRTUAL_ENV ]]; then
     deactivate

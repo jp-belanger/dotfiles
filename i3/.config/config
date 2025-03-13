@@ -336,7 +336,8 @@ exec --no-startup-id ~/.screenlayout/monitor.sh
 
 # set wallpaper
 # exec --no-startup-id sleep 2 && nitrogen --restore
-exec --no-startup-id sleep 1 && feh --bg-fill /usr/share/endeavouros/backgrounds/eos_wallpapers_community/endeavour_os_simple_wallpaper_dark.png
+# exec --no-startup-id sleep 1 && feh --bg-fill /usr/share/endeavouros/backgrounds/eos_wallpapers_community/endeavour_os_simple_wallpaper_dark.png
+exec --no-startup-id sleep 1 && xsetroot -solid $black
 
 # set powersavings for display:
 exec --no-startup-id xset s 480 dpms 600 600 600

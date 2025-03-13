@@ -53,3 +53,6 @@ Xft.rgba:      rgb
 Xft.autohint:  false
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
+
+Xcursor.theme: Qogir-dark
+Xcursor.size: 16

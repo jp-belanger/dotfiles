@@ -55,4 +55,8 @@ Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
 Xcursor.theme: Qogir-dark
-Xcursor.size: 16
+Xcursor.size:  16
+
+! laptop specific configs
+rofi.dpi:      192
+Xft.dpi:       192

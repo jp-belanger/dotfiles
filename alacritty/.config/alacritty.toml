@@ -32,20 +32,21 @@ foreground = "0xc5c8c6"
 TERM = "alacritty"
 
 [font]
-size = 11
+size = 12  # laptop
+# size = 11  # desktop
 
 [font.bold]
-family = "SauceCodePro Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [font.bold_italic]
-family = "SauceCodePro Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [font.italic]
-family = "SauceCodePro Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
 
 [font.normal]
-family = "SauceCodePro Nerd Font Mono"
+family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"

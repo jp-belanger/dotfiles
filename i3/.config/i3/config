@@ -25,8 +25,8 @@
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango: Noto Sans Regular 10
 
-# set the mod key to the winkey (Mod1 for L-Alt):
-set $mod Mod4
+# set the mod key to the winkey (Mod1 for L-Alt, Mod4 for super):
+set $mod Mod1
 
 #####################
 # workspace layout: #
@@ -66,9 +66,9 @@ gaps outer 0
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
-# switch/iterate between workspaces
-bindsym $mod+Tab workspace next
-bindsym $mod+Shift+Tab workspace prev
+# # switch/iterate between workspaces
+# bindsym $mod+Tab workspace next
+# bindsym $mod+Shift+Tab workspace prev
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -145,7 +145,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # keybinding in fancy rofi (automated):
-bindsym F1 exec --no-startup-id ~/.config/i3/scripts/keyhint-2
+# bindsym F1 exec --no-startup-id ~/.config/i3/scripts/keyhint-2
 # alternative
 # keybinding list in editor:
 # bindsym $mod+F1 exec --no-startup-id xed ~/.config/i3/keybindings
@@ -179,8 +179,8 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+g layout tabbed
+# bindsym $mod+s layout stacking
+# bindsym $mod+g layout tabbed
 bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
@@ -240,7 +240,7 @@ bindsym $mod+Shift+p exec --no-startup-id ~/.config/i3/scripts/power-profiles
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1:"
+set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
 set $ws4 "4"
@@ -347,7 +347,7 @@ exec --no-startup-id xset s 480 dpms 600 600 600
 
 # use xautolock to use autosuspend rules for mobile devices
 # https://wiki.archlinux.org/title/Session_lock#xautolock
-#exec --no-startup-id xautolock -time 60 -locker "systemctl suspend"
+exec --no-startup-id xautolock -time 60 -locker "systemctl suspend"
 
 
 # xscreensaver
@@ -359,8 +359,8 @@ exec --no-startup-id xset s 480 dpms 600 600 600
 # set alternative config if needed:
 #exec --no-startup-id /usr/bin/dunst --config ~/.config/dunst/dunstrc
 # may need to run dbus-launch explicitly: 
-#exec --no-startup-id dbus-launch /usr/bin/dunst
-exec --no-startup-id /usr/bin/dunst
+exec --no-startup-id dbus-launch /usr/bin/dunst
+# exec --no-startup-id /usr/bin/dunst
 # alternative if you installed aside with XFCE4:
 # exec --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd &
 
@@ -373,6 +373,10 @@ exec --no-startup-id /usr/bin/dunst
 #exec --no-startup-id sleep 2 && xfce4-terminal
 #exec --no-startup-id sleep 7 && firefox https://github.com/endeavouros-team/endeavouros-i3wm-setup/blob/main/force-knowledge.md
 #exec --no-startup-id sleep 3 && thunar
+
+
+# set dpi
+exec --no-startup-id xrandr --dpi 192
 
 ###############
 # system tray #
@@ -512,7 +516,7 @@ strip_workspace_numbers yes
 
 ## rofi bindings fancy application menu ($mod+d /F9 optional disabled)
 
-bindsym $mod+d exec --no-startup-id rofi -modi drun -show drun \
+bindsym $mod+d exec --no-startup-id rofi -modi drun -dpi 1 -show drun \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 #bindsym F9 exec --no-startup-id rofi -modi drun -show drun \
@@ -520,7 +524,7 @@ bindsym $mod+d exec --no-startup-id rofi -modi drun -show drun \
 
 ## rofi bindings for window menu ($mod+t /F10 optional disabled)
 
-bindsym $mod+t exec --no-startup-id rofi -show window \
+bindsym $mod+t exec --no-startup-id rofi -dpi 1 -show window \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 #bindsym F10 exec --no-startup-id rofi -show window \

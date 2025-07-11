@@ -127,28 +127,6 @@ alias ll="${aliases[ls]:-ls} -lh" # human readable sizes.
 alias lr="${aliases[ll]:-ll} -R"  # human readable sizes, recursively.
 alias la="${aliases[ll]:-ll} -A"  # human readable sizes, hidden files.
 alias lar="${aliases[la]:-la} -R" # human readable sizes, recursively.
-# git
-alias gs="git status --short"
-alias gS="git status"
-alias ga="git add"
-alias gcm="git commit --message"
-alias gpu="git push -u"
-alias gfo="git fetch origin"
-alias gM="git merge --ff-only"
-alias gd="git diff --no-ext-diff"
-alias gD="git diff --no-ext-diff --word-diff"
-alias gco="git checkout"
-alias gsw="git switch"
-alias gl="git log"
-alias gbr="git branch"
-alias gw="git worktree"
-# tmux
-alias tmk="tmux kill-server"
-alias tml="tmux list-sessions"
-alias tms="tmux switch-client -t"
-alias tmd="tmux detach-client"
-alias tma="tmux attach-session -t"
-alias tmn="tmux new-session -s"
 
 # Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
 setopt glob_dots             # no special treatment for file names with a leading dot

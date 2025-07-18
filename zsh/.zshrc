@@ -52,11 +52,11 @@ z4h init || return
 # Extend PATH.
 path=(~/.local/bin $path)
 path=(~/.cargo/bin $path)
-path=($path /opt/nvim-linux64/bin)
+path=($path /opt/nvim-linux-x86_64/bin)
 
 # Export environment variables.
 export GPG_TTY=$TTY
-export EDITOR="vi"
+export EDITOR=$(command -v nvim || command -v vi)
 export VISUAL="nvim"
 
 # Source additional local files if they exist.

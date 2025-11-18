@@ -103,7 +103,7 @@ function ve() {
         . ".venv/bin/activate"
   fi
 }
-alias uvc="uv run ruff check && uv run ruff format && uv run mypy ."
+alias uvc="uv run ruff check && uv run ruff format && uv run mypy . --strict"
 
 # Define named directories: ~w <=> Windows home directory on WSL.
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home

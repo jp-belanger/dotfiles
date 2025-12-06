@@ -13,30 +13,7 @@ return {
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       end
 
-      local lspconfig = require "lspconfig"
-      local servers = {
-        rust_analyzer = true,
-        pyright = true,
-        lua_ls = {
-          server_capabilities = {
-            semanticTokensProvider = vim.NIL,
-          },
-        },
-        ts_ls = {
-          server_capabilities = {
-            documentFormattingProvider = false,
-          },
-        },
-      }
-
-      local servers_to_install = vim.tbl_filter(function(key)
-        local t = servers[key]
-        if type(t) == "table" then
-          return not t.manual_install
-        else
-          return t
-        end
-      end, vim.tbl_keys(servers))
+      local servers = { "rust_analyzer", "pyright", "lua_ls", "ts_ls" }
 
       require("mason").setup()
       local ensure_installed = {
@@ -44,33 +21,20 @@ return {
         "lua_ls",
       }
 
-      vim.list_extend(ensure_installed, servers_to_install)
+      vim.list_extend(ensure_installed, servers)
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
-      for name, config in pairs(servers) do
-        if config == true then
-          config = {}
-        end
-        config = vim.tbl_deep_extend("force", {}, {
-          capabilities = capabilities,
-        }, config)
+      -- Global LSP config (applies to all servers)
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+      })
 
-        lspconfig[name].setup(config)
-      end
-
-      local disable_semantic_tokens = {
-        lua = true,
-      }
+      -- Enable all configured servers
+      vim.lsp.enable(servers)
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          local bufnr = args.buf
           local client = assert(vim.lsp.get_client_by_id(args.data.client_id), "must have valid client")
-
-          local settings = servers[client.name]
-          if type(settings) ~= "table" then
-            settings = {}
-          end
 
           local builtin = require "telescope.builtin"
           vim.opt_local.omnifunc = "v:lua.vim.lsp.omnifunc"
@@ -85,20 +49,14 @@ return {
           vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, { buffer = 0 })
           vim.diagnostic.config { virtual_text = false } -- remove in-line virtual-text diagnostics
 
-          local filetype = vim.bo[bufnr].filetype
-          if disable_semantic_tokens[filetype] then
+          -- Disable semantic tokens for lua_ls
+          if client.name == "lua_ls" then
             client.server_capabilities.semanticTokensProvider = nil
           end
 
-          -- Override server capabilities
-          if settings.server_capabilities then
-            for k, v in pairs(settings.server_capabilities) do
-              if v == vim.NIL then
-                v = nil
-              end
-
-              client.server_capabilities[k] = v
-            end
+          -- Disable formatting for ts_ls (use prettier via conform instead)
+          if client.name == "ts_ls" then
+            client.server_capabilities.documentFormattingProvider = false
           end
         end,
       })

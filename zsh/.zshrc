@@ -34,10 +34,7 @@ zstyle ':z4h:direnv:success' notify 'yes'
 
 # Enable ('yes') or disable ('no') automatic teleportation of z4h over
 # SSH when connecting to these hosts.
-zstyle ':z4h:ssh:example-hostname1'   enable 'yes'
-zstyle ':z4h:ssh:*.example-hostname2' enable 'no'
-# The default value if none of the overrides above match the hostname.
-zstyle ':z4h:ssh:*'                   enable 'no'
+zstyle ':z4h:ssh:*' enable 'no'
 
 # Send these files over to the remote host when connecting over SSH to the
 # enabled hosts.
@@ -50,14 +47,18 @@ zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
 z4h init || return
 
 # Extend PATH.
-path=(~/.local/bin $path)
-path=(~/.cargo/bin $path)
-path=($path /opt/nvim-linux-x86_64/bin)
+typeset -U path
+path=(~/.cargo/bin ~/.local/bin $path /opt/nvim-linux-x86_64/bin)
 
 # Export environment variables.
 export GPG_TTY=$TTY
-export EDITOR=$(command -v nvim || command -v vi)
-export VISUAL="nvim"
+if (( $+commands[nvim] )); then
+  export EDITOR="nvim"
+  export VISUAL="nvim"
+else
+  export EDITOR="vi"
+  export VISUAL="vi"
+fi
 
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
@@ -100,10 +101,23 @@ function ve() {
   if [[ -v VIRTUAL_ENV ]]; then
     deactivate
   elif [[ -d ".venv" ]]; then
-        . ".venv/bin/activate"
+        source ".venv/bin/activate"
   fi
 }
 alias uvc="uv run ruff check --fix && uv run ruff format && uv run mypy . --strict"
+
+# Start ssh-agent
+if [[ -z "$SSH_AUTH_SOCK" ]]; then
+  export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+  [[ -S "$SSH_AUTH_SOCK" ]] || {
+    rm -f "$SSH_AUTH_SOCK"
+    eval $(ssh-agent -a "$SSH_AUTH_SOCK" -s) >/dev/null
+    # Add keys if they exist
+    [[ -f ~/.ssh/ansible_personal ]] && ssh-add ~/.ssh/ansible_personal 2>/dev/null
+    [[ -f ~/.ssh/ansible_workstation ]] && ssh-add ~/.ssh/ansible_workstation 2>/dev/null
+    [[ -f ~/.ssh/ansible_devserver ]] && ssh-add ~/.ssh/ansible_devserver 2>/dev/null
+  }
+fi
 
 # Define named directories: ~w <=> Windows home directory on WSL.
 [[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home

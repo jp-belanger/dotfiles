@@ -13,7 +13,7 @@ return {
         capabilities = require("cmp_nvim_lsp").default_capabilities()
       end
 
-      local servers = { "rust_analyzer", "pyright", "lua_ls", "ts_ls" }
+      local servers = { "rust_analyzer", "ty", "lua_ls", "ts_ls" }
 
       require("mason").setup()
       local ensure_installed = {

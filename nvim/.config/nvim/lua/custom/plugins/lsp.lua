@@ -19,6 +19,10 @@ return {
       local ensure_installed = {
         "stylua",
         "lua_ls",
+        "tree-sitter-cli",
+        "ruff",
+        "prettier",
+        "prettierd",
       }
 
       vim.list_extend(ensure_installed, servers)

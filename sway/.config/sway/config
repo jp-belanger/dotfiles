@@ -1,6 +1,114 @@
+# Font for window titles. 
+font pango: Noto Sans Regular 10
+
+# Window options
+default_border pixel 1
+gaps inner 0
+gaps outer 0
+
 # set the mod key to L-Alt
 set $mod Mod1
 
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Keybinds
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+
+# resize window (you can also use the mouse for that):
+mode "resize" {
+# These bindings trigger as soon as you enter the resize mode
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
 # terminal setup
 set $term alacritty
-bindsym $mod+Return exec $term
+bindsym $mod+Return exec --no-startup-id $term
+
+# kill focused window
+bindsym $mod+q kill
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to update i3)
+bindsym $mod+Shift+r restart
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# Application shortcuts
+bindsym $mod+w exec --no-startup-id /usr/bin/brave
+bindsym $mod+n exec --no-startup-id /usr/bin/thunar
+
+# set caps lock to ctrl
+input * xkb_options caps:ctrl_modifier
+
+# Rofi application menu
+bindsym $mod+d exec --no-startup-id rofi -modi drun -dpi 1 -show drun \
+		-config ~/.config/rofi/rofidmenu.rasi
+
+# Rofi windows menu
+bindsym $mod+t exec --no-startup-id rofi -dpi 1 -show window \
+		-config ~/.config/rofi/rofidmenu.rasi
+
+# color settings for bar and windows
+
+# Define colors variables:
+set $darkblue		#08052b
+set $lightblue		#5294e2
+set $urgentred		#e53935
+set $white		#ffffff
+set $black		#000000
+set $purple		#e345ff
+set $darkgrey		#383c4a
+set $grey		#b0b5bd
+set $mediumgrey		#8b8b8b
+set $yellowbrown	#e1b700
+
+# define colors for windows:
+#class		        	border		bground		text		indicator	child_border
+client.focused		    	$lightblue	$darkblue	$white		$mediumgrey	$mediumgrey
+client.unfocused	    	$darkblue	$darkblue	$grey		$darkgrey	$darkgrey
+client.focused_inactive		$darkblue	$darkblue	$grey		$black		$black
+client.urgent		    	$urgentred	$urgentred	$white		$yellowbrown	$yellowbrown
+

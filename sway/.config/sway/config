@@ -1,0 +1,6 @@
+# set the mod key to L-Alt
+set $mod Mod1
+
+# terminal setup
+set $term alacritty
+bindsym $mod+Return exec $term

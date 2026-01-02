@@ -41,7 +41,7 @@ exec swayidle -w \
          before-sleep $lock
 
 # Autostarts
-exec --no-startup-id mako
+exec mako
 
 # screen layout
 
@@ -88,7 +88,7 @@ bindsym $mod+r mode "resize"
 
 # terminal setup
 set $term alacritty
-bindsym $mod+Return exec --no-startup-id $term
+bindsym $mod+Return exec $term
 
 # kill focused window
 bindsym $mod+q kill
@@ -121,8 +121,8 @@ bindsym --locked XF86AudioRaiseVolume exec amixer set Master 2dB+ unmute
 bindsym --locked XF86AudioLowerVolume exec amixer set Master 2dB- unmute
 
 # Application shortcuts
-bindsym $mod+w exec --no-startup-id /usr/bin/brave
-bindsym $mod+n exec --no-startup-id /usr/bin/thunar
+bindsym $mod+w exec /usr/bin/brave
+bindsym $mod+n exec /usr/bin/thunar
 
 # set caps lock to ctrl
 input * xkb_options caps:ctrl_modifier

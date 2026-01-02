@@ -86,7 +86,7 @@ bindsym $mod+Shift+l move right
 bindsym $mod+f fullscreen toggle
 
 # Lock
-set $lock swaylock --daemonize
+set $lock swaylock --daemonize --screenshot --effect-blur 7x5
 bindsym $mod+Shift+o exec $lock
 
 # Function keys

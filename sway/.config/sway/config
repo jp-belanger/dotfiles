@@ -24,6 +24,28 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
+# bar
+bar {
+    swaybar_command waybar
+}
+
+
+# Idle settings
+exec swayidle -w \
+         timeout 60 $lock \
+         timeout 300 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep $lock
+
+# Autostarts
+exec --no-startup-id mako
+
+# screen layout
+
+workspace 1 output DP-2
+workspace 2 output DP-1
+workspace 3 output DP-3
+
 # Keybinds
 
 # switch to workspace
@@ -129,18 +151,3 @@ client.focused		    	$lightblue	$darkblue	$white		$mediumgrey	$mediumgrey
 client.unfocused	    	$darkblue	$darkblue	$grey		$darkgrey	$darkgrey
 client.focused_inactive		$darkblue	$darkblue	$grey		$black		$black
 client.urgent		    	$urgentred	$urgentred	$white		$yellowbrown	$yellowbrown
-
-# Idle
-exec swayidle -w \
-         timeout 60 $lock \
-         timeout 300 'swaymsg "output * dpms off"' \
-              resume 'swaymsg "output * dpms on"' \
-         before-sleep $lock
-
-# Autostarts
-exec --no-startup-id mako
-
-# bar
-bar {
-    swaybar_command waybar
-}

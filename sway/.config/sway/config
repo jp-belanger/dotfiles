@@ -127,11 +127,15 @@ bindsym $mod+n exec --no-startup-id /usr/bin/thunar
 input * xkb_options caps:ctrl_modifier
 
 # Rofi application menu
-bindsym $mod+d exec --no-startup-id rofi -modi drun -dpi 1 -show drun \
+bindsym $mod+d exec rofi -modi drun -dpi 1 -show drun \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 # Rofi windows menu
-bindsym $mod+t exec --no-startup-id rofi -dpi 1 -show window \
+bindsym $mod+t exec rofi -dpi 1 -show window \
+		-config ~/.config/rofi/rofidmenu.rasi
+
+# Rofi power menu
+bindsym $mod+Shift+e exec rofi -modi power-menu:rofi-power-menu -show power-menu \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 # color settings for bar and windows

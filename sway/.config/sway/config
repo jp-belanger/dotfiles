@@ -135,7 +135,7 @@ bindsym $mod+t exec rofi -dpi 1 -show window \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 # Rofi power menu
-bindsym $mod+Shift+e exec rofi -modi power-menu:rofi-power-menu -show power-menu \
+bindsym $mod+Shift+e exec rofi -modi "power-menu:rofi-power-menu --confirm=''" -show power-menu \
 		-config ~/.config/rofi/rofidmenu.rasi
 
 # color settings for bar and windows

@@ -1,4 +1,4 @@
-# Font for window titles. 
+#Font for window titles. 
 font pango: Noto Sans Regular 10
 
 # Window options
@@ -70,9 +70,6 @@ bindsym $mod+q kill
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
-# restart i3 inplace (preserves your layout/session, can be used to update i3)
-bindsym $mod+Shift+r restart
-
 # change focus
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -87,6 +84,15 @@ bindsym $mod+Shift+l move right
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
+
+# Lock
+set $lock swaylock --daemonize
+bindsym $mod+Shift+o exec $lock
+
+# Function keys
+bindsym --locked XF86AudioMute exec amixer set Master toggle
+bindsym --locked XF86AudioRaiseVolume exec amixer set Master 2dB+ unmute
+bindsym --locked XF86AudioLowerVolume exec amixer set Master 2dB- unmute
 
 # Application shortcuts
 bindsym $mod+w exec --no-startup-id /usr/bin/brave
@@ -124,8 +130,17 @@ client.unfocused	    	$darkblue	$darkblue	$grey		$darkgrey	$darkgrey
 client.focused_inactive		$darkblue	$darkblue	$grey		$black		$black
 client.urgent		    	$urgentred	$urgentred	$white		$yellowbrown	$yellowbrown
 
+# Idle
+exec swayidle -w \
+         timeout 60 $lock \
+         timeout 300 'swaymsg "output * dpms off"' \
+              resume 'swaymsg "output * dpms on"' \
+         before-sleep $lock
+
 # Autostarts
 exec --no-startup-id mako
 
 # bar
-exec waybar
+bar {
+    swaybar_command waybar
+}

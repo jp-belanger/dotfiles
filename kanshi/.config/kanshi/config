@@ -26,3 +26,7 @@ profile home_desktop {
 profile laptop {
     output eDP-1 enable
 }
+
+profile "fallback" {
+    output * enable
+}

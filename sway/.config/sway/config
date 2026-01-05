@@ -34,10 +34,10 @@ bar {
 
 # Idle settings
 exec swayidle -w \
-         timeout 60 $lock \
+         timeout 180 'swaylock --daemonize --screenshots --effect-blur 7x5' \
          timeout 300 'swaymsg "output * dpms off"' \
               resume 'swaymsg "output * dpms on"' \
-         before-sleep $lock
+         before-sleep 'swaylock --daemonize --screenshots --effect-blur 7x5'
 
 # Autostarts
 exec mako
@@ -110,8 +110,8 @@ bindsym $mod+Shift+l move right
 bindsym $mod+f fullscreen toggle
 
 # Lock
-set $lock swaylock --daemonize --screenshot --effect-blur 7x5
-bindsym $mod+Shift+o exec $lock
+
+bindsym $mod+Shift+o exec swaylock --daemonize --screenshots --effect-blur 7x5
 
 # Function keys
 bindsym --locked XF86AudioMute exec amixer set Master toggle

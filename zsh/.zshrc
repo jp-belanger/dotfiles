@@ -104,7 +104,7 @@ function ve() {
         source ".venv/bin/activate"
   fi
 }
-alias uvc="uv run ruff check --fix && uv run ruff format && uv run mypy . --strict"
+alias uvc="uv run ruff check --fix && uv run ruff format && uv run ty check --no-progress"
 
 # Start ssh-agent
 if [[ -z "$SSH_AUTH_SOCK" ]]; then

@@ -1,5 +1,5 @@
 # Set sway + wayland env variables
-exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP DISPLAY XDG_SESSION_TYPE && dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway DISPLAY XDG_SESSION_TYPE=wayland
+include /etc/sway/config.d/*
 
 #Font for window titles. 
 font pango: Noto Sans Regular 10

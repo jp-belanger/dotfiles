@@ -100,8 +100,16 @@ compdef _directories md
 function ve() {
   if [[ -v VIRTUAL_ENV ]]; then
     deactivate
-  elif [[ -d ".venv" ]]; then
-        source ".venv/bin/activate"
+    return
+  fi
+  local py venv
+  py=$(uv python find 2>/dev/null) || return 1
+  venv=$(dirname "$(dirname "$py")")
+  if [[ -f "$venv/pyvenv.cfg" ]]; then
+    source "$venv/bin/activate"
+  else
+    echo "no workspace venv found" >&2
+    return 1
   fi
 }
 alias uvc="uv run ruff check --fix && uv run ruff format && uv run ty check --no-progress"

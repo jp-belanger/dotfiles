@@ -128,6 +128,7 @@ bindsym --locked XF86AudioLowerVolume exec amixer set Master 2dB- unmute
 # Application shortcuts
 bindsym $mod+w exec /usr/bin/brave
 bindsym $mod+n exec /usr/bin/thunar
+bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 
 # set caps lock to ctrl
 input * xkb_options caps:ctrl_modifier

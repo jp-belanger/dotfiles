@@ -8,10 +8,15 @@ return {
       "stevearc/conform.nvim",
     },
     config = function()
-      local capabilities = nil
-      if pcall(require, "cmp_nvim_lsp") then
-        capabilities = require("cmp_nvim_lsp").default_capabilities()
-      end
+      local capabilities = require("blink.cmp").get_lsp_capabilities {
+        textDocument = {
+          completion = {
+            completionItem = {
+              snippetSupport = false,
+            },
+          },
+        },
+      }
 
       local servers = { "rust_analyzer", "ty", "lua_ls", "ts_ls" }
 

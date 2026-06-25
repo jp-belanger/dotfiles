@@ -73,9 +73,9 @@ return {
           lua = { "stylua" },
           python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
           rust = { "rustfmt" },
-          javascript = { "prettier", stop_after_first = true },
-          typescript = { "prettier", stop_after_first = true },
-          typescriptreact = { "prettier", stop_after_first = true },
+          javascript = { "prettierd", "prettier", stop_after_first = true },
+          typescript = { "prettierd", "prettier", stop_after_first = true },
+          typescriptreact = { "prettierd", "prettier", stop_after_first = true },
         },
         format_on_save = {
           timeout_ms = 500,

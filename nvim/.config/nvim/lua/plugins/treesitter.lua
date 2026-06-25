@@ -1,4 +1,5 @@
 local parsers = {
+  "bash",
   "c",
   "css",
   "html",
@@ -10,13 +11,16 @@ local parsers = {
   "python",
   "query",
   "rust",
+  "toml",
   "tsx",
   "typescript",
   "vim",
   "vimdoc",
+  "yaml",
 }
 
 local filetypes = {
+  "bash",
   "c",
   "css",
   "html",
@@ -26,10 +30,12 @@ local filetypes = {
   "markdown",
   "python",
   "rust",
+  "toml",
   "typescript",
   "typescriptreact",
   "vim",
   "vimdoc",
+  "yaml",
 }
 
 return {

@@ -11,3 +11,5 @@ opt.splitbelow = true
 opt.signcolumn = "yes"
 opt.clipboard = "unnamedplus" -- syncs OS and nvim clipboard
 opt.formatoptions:remove "o" --dont have 'o' add a comment line
+
+vim.diagnostic.config { virtual_text = false } -- remove in-line virtual-text diagnostics

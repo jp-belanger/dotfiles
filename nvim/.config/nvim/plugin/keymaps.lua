@@ -40,6 +40,3 @@ nmap("Q", "<nop>")
 -- folds keymaps
 nmap("<F6>", ":set foldmethod=indent<CR>")
 nmap("<F8>", ":setlocal foldnestmax=2<CR>")
-
--- file explorer
-nmap("<leader>pv", ":Ex<CR>")

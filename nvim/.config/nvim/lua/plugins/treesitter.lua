@@ -16,6 +16,22 @@ local parsers = {
   "vimdoc",
 }
 
+local filetypes = {
+  "c",
+  "css",
+  "html",
+  "javascript",
+  "json",
+  "lua",
+  "markdown",
+  "python",
+  "rust",
+  "typescript",
+  "typescriptreact",
+  "vim",
+  "vimdoc",
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -28,10 +44,10 @@ return {
       require("nvim-treesitter").install(parsers)
 
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = parsers,
-        callback = function()
-          pcall(vim.treesitter.start)
-          vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        pattern = filetypes,
+        callback = function(args)
+          pcall(vim.treesitter.start, args.buf)
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
         end,
       })
     end,

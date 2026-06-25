@@ -19,16 +19,19 @@ return {
       local servers = { "rust_analyzer", "ty", "lua_ls", "ts_ls" }
 
       require("mason").setup()
-      local ensure_installed = {
-        "stylua",
-        "tree-sitter-cli",
-        "ruff",
-        "prettier",
-        "prettierd",
+      require("mason-tool-installer").setup {
+        ensure_installed = {
+          "stylua",
+          "tree-sitter-cli",
+          "ruff",
+          "prettier",
+          "prettierd",
+          "rust-analyzer",
+          "ty",
+          "lua-language-server",
+          "typescript-language-server",
+        },
       }
-
-      vim.list_extend(ensure_installed, servers)
-      require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
       -- Global LSP config (applies to all servers)
       vim.lsp.config("*", {

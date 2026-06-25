@@ -5,7 +5,8 @@ return {
       require("lualine").setup {
         options = {
           theme = "auto",
-          separator = { left = "", right = "" },
+          component_separators = "",
+          section_separators = "",
         },
       }
     end,

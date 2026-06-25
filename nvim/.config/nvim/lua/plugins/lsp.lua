@@ -4,7 +4,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
-      "stevearc/conform.nvim",
     },
     config = function()
       local capabilities = require("blink.cmp").get_lsp_capabilities {
@@ -66,21 +65,6 @@ return {
           end
         end,
       })
-      -- Autoformatting Setup
-      require("conform").setup {
-        formatters_by_ft = {
-          lua = { "stylua" },
-          python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
-          rust = { "rustfmt" },
-          javascript = { "prettierd", "prettier", stop_after_first = true },
-          typescript = { "prettierd", "prettier", stop_after_first = true },
-          typescriptreact = { "prettierd", "prettier", stop_after_first = true },
-        },
-        format_on_save = {
-          timeout_ms = 500,
-          lsp_format = "fallback",
-        },
-      }
     end,
   },
 }

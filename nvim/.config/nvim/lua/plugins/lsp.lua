@@ -22,7 +22,6 @@ return {
       require("mason").setup()
       local ensure_installed = {
         "stylua",
-        "lua_ls",
         "tree-sitter-cli",
         "ruff",
         "prettier",

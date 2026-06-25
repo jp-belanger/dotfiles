@@ -7,8 +7,10 @@ return {
     },
     config = function()
       require("telescope").setup {
-        extensions = {
+        defaults = {
           wrap_results = true,
+        },
+        extensions = {
           fzf = {},
         },
       }

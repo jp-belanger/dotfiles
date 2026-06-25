@@ -1,4 +1,20 @@
-local parsers = { "c", "lua", "vim", "vimdoc", "query", "python", "rust", "markdown", "markdown_inline" }
+local parsers = {
+  "c",
+  "css",
+  "html",
+  "javascript",
+  "json",
+  "lua",
+  "markdown",
+  "markdown_inline",
+  "python",
+  "query",
+  "rust",
+  "tsx",
+  "typescript",
+  "vim",
+  "vimdoc",
+}
 
 return {
   {

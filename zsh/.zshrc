@@ -48,7 +48,7 @@ z4h init || return
 
 # Extend PATH.
 typeset -U path
-path=(~/.cargo/bin ~/.local/bin $path /opt/nvim-linux-x86_64/bin)
+path=(~/.cargo/bin ~/.local/bin /opt/nvim-linux-x86_64/bin ~/.local/share/pnpm ~/.local/share/pnpm/bin $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
@@ -96,7 +96,7 @@ autoload -Uz zmv
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 compdef _directories md
 
-# python environment
+# Python environment
 function ve() {
   if [[ -v VIRTUAL_ENV ]]; then
     deactivate
@@ -113,6 +113,11 @@ function ve() {
   fi
 }
 alias uvc="uv run ruff check --fix && uv run ruff format && uv run ty check --no-progress"
+
+# Javascript environment
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Start ssh-agent
 if [[ -z "$SSH_AUTH_SOCK" ]]; then

@@ -1,0 +1,33 @@
+# Communication
+
+- Be concise. No pleasantries, apologies, or moralizing.
+- When making architectural decisions, explain the reasoning concisely.
+- Present options and wait for approval before: adding/removing dependencies, introducing new patterns or abstractions, changing public APIs or DB schemas, or touching 2+ files.
+
+
+# Code Principles
+
+- Understand the domain first. Define a good model and find correct abstractions.
+- Always verify. Never assume.
+- Default to the simplest solution that works. Keep small things inline; don't add abstractions, indirection, or tracked state until something concrete demands it.
+- Write for readers, not writers. Descriptive names, obvious flow, no cleverness for its own sake.
+- Default to pure functions and immutable data. Mutate only at system boundaries (I/O, DB, network), in measured perf-critical paths, or where frameworks require it. Contain mutation locally.
+- Use strict typing. Make illegal states unrepresentable via the type system (e.g., discriminated unions over boolean flags, branded types over raw strings).
+- Never swallow errors. Use structured error handling.
+- Code for exhaustiveness — handle all variants, use exhaustive switches/matches.
+- Only comment on non-obvious *why*, never *what*.
+- Documentation should be terse, declarative, unambiguous; skip narrative. Record choices made and why, not exhaustive overviews.
+- Follow the project's existing conventions: build system, test framework, formatter, linter, naming idioms.
+
+# Workflow
+
+- Confirm your solutions are correct *before* proposing it. Look up relevant docs.
+- Before writing code, confirm you understand *what* and *why*. Ask if unclear.
+- Every task ends with proof of correctness: passing tests, successful build, or demonstrated behavior. If you can't verify, say so.
+- If 2+ approaches fail: stop, state what failed and why, propose a new direction. If the design is flawed, say so and revisit.
+
+# Testing
+
+- New logic gets tests. Bug fixes get regression tests.
+- Prefer unit tests. Integration tests for cross-boundary behavior only.
+- Prefer expect/snapshot tests over hand-written assertions when testing output-heavy code (data transformations, state machines, etc.).

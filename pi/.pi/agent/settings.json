@@ -1,0 +1,23 @@
+{
+  "lastChangelogVersion": "0.80.3",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "low",
+  "theme": "dark",
+  "enabledModels": [
+    "openai-codex/gpt-5.3-codex-spark",
+    "openai-codex/gpt-5.5",
+    "openrouter/deepseek/deepseek-v4-pro",
+    "openrouter/deepseek/deepseek-v4-flash",
+    "openrouter/anthropic/claude-opus-4.6",
+    "openrouter/moonshotai/kimi-k2.6",
+    "openrouter/qwen/qwen3.7-max",
+    "openrouter/qwen/qwen3.7-plus"
+  ],
+  "hideThinkingBlock": true,
+  "packages": [
+    "npm:pi-web-access",
+    "npm:pi-sandbox",
+    "npm:pi-permission-system"
+  ]
+}

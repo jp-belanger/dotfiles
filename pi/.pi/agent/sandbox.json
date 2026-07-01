@@ -1,0 +1,42 @@
+{
+  "enabled": true,
+  "allowBrowserProcess": true,
+  "network": {
+    "allowLocalBinding": true,
+    "allowAllUnixSockets": true,
+    "allowedDomains": [
+      "github.com",
+      "*.github.com",
+      "pypi.org",
+      "files.pythonhosted.org"
+    ],
+    "deniedDomains": []
+  },
+  "filesystem": {
+    "denyRead": [
+      ".env",
+      "*.pem",
+      "*.key",
+      "*-sa.json",
+      "~/.ssh"
+    ],
+    "allowRead": [
+      ".",
+      "~/.local",
+      "~/.pi",
+      "~/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent"
+    ],
+    "allowWrite": [
+      ".",
+      "/tmp",
+      "~/.pi",
+      "~/.cache/uv"
+    ],
+    "denyWrite": [
+      ".env",
+      ".env.*",
+      "*.pem",
+      "*.key"
+    ]
+  }
+}

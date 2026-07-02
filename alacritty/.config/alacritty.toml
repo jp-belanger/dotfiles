@@ -1,41 +1,36 @@
-colors.draw_bold_text_with_bright_colors = false
-
-[colors.primary]
-background = "0x111111"
-foreground = "0xe0e0e0"
-
-[colors.cursor]
-cursor = "0xe0e0e0"
-text = "0x111111"
-
-[colors.normal]
-black = "0x111111"
-blue = "0x81a2be"
-cyan = "0x8abeb7"
-green = "0x99cc99"
-magenta = "0xb294bb"
-red = "0xcc6666"
-white = "0xe0e0e0"
-yellow = "0xf8fe7a"
-
 [env]
 TERM = "alacritty"
 
 [font]
 size = 12
 
-[font.bold]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Regular"
-
-[font.bold_italic]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Regular"
-
-[font.italic]
-family = "JetBrainsMono Nerd Font Mono"
-style = "Regular"
-
 [font.normal]
 family = "JetBrainsMono Nerd Font Mono"
 style = "Regular"
+
+[font.bold]
+style = "SemiBold"
+
+[font.italic]
+style = "Regular"
+
+[font.bold_italic]
+style = "SemiBold"
+
+[colors.primary]
+background = "#111111"
+foreground = "#e0e0e0"
+
+[colors.cursor]
+cursor = "#e0e0e0"
+text = "#111111"
+
+[colors.normal]
+black = "#111111"
+red = "#cc6666"
+green = "#99cc99"
+yellow = "#f8fe7a"
+blue = "#81a2be"
+magenta = "#b294bb"
+cyan = "#8abeb7"
+white = "#e0e0e0"

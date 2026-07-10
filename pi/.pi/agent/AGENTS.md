@@ -53,3 +53,7 @@ For multi-step tasks, state a brief plan:
 2. [Step] → verify: [check]
 3. [Step] → verify: [check]
 ```
+
+## Avoid
+
+- Creating bash or python shell scripts instead of using the edit and write tools

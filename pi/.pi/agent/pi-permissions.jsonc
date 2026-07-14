@@ -33,7 +33,7 @@
     "git commit *": "ask",
     "git push *": "deny",
     "git pull *": "deny",
-    "uv *": "ask",
+    "uv *": "allow",
     "uv run ruff *": "allow",
     "uv run ty *": "allow",
     "uv run pytest *": "allow",

@@ -2,7 +2,7 @@
   "lastChangelogVersion": "0.80.6",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "medium",
+  "defaultThinkingLevel": "low",
   "theme": "dark",
   "enabledModels": [
     "openrouter/anthropic/claude-opus-4.6",
@@ -14,9 +14,9 @@
   "hideThinkingBlock": true,
   "packages": [
     "npm:pi-web-access",
-    "npm:pi-sandbox",
     "npm:pi-permission-system",
-    "../pi-config"
+    "../pi-config",
+    "git:github.com/carderne/pi-sandbox@d14e15a76b4ae030b07bdd3e6f42732ed3636679"
   ],
   "showCacheMissNotices": true
 }

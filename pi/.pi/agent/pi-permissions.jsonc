@@ -25,6 +25,8 @@
     "cat *": "allow",
     "head *": "allow",
     "tail *": "allow",
+    "printf *": "allow",
+    "wc *": "allow",
     "git status *": "allow",
     "git diff *": "allow",
     "git log *": "allow",
@@ -33,7 +35,7 @@
     "git commit *": "ask",
     "git push *": "deny",
     "git pull *": "deny",
-    "uv *": "allow",
+    "uv *": "ask",
     "uv run ruff *": "allow",
     "uv run ty *": "allow",
     "uv run pytest *": "allow",
@@ -53,6 +55,12 @@
     "just *": "ask",
     "just check *": "allow",
     "just check-*": "allow",
-    "just test *": "allow"
+    "just test *": "allow",
+    "python *": "deny",
+    "python3 *": "deny"
+  },
+  "special": {
+    "external_directory": "ask",
+    "external_directory:/home/jp/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent/*": "allow"
   }
 }

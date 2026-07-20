@@ -44,12 +44,12 @@ exec swayidle -w \
 
 # Autostarts
 exec mako
+exec swayosd-server
 
-# screen layout
+# workspace layout
 workspace 1 output "Samsung Electric Company C49HG9x HNTR500127" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
 workspace 2 output "BNQ ZOWIE XL LCD CCJ03844SL0" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
 workspace 3 output "BNQ ZOWIE XL LCD CCJ03852SL0" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
-
 
 # Lid / clamshell handling
 bindswitch --reload --locked lid:on  output eDP-1 disable
@@ -121,9 +121,16 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+Shift+o exec swaylock --daemonize --screenshots --effect-blur 7x5
 
 # Function keys
-bindsym --locked XF86AudioMute exec amixer set Master toggle
-bindsym --locked XF86AudioRaiseVolume exec amixer set Master 2dB+ unmute
-bindsym --locked XF86AudioLowerVolume exec amixer set Master 2dB- unmute
+bindsym --locked XF86AudioMute exec \
+    swayosd-client --output-volume mute-toggle
+bindsym --locked XF86AudioRaiseVolume exec \
+    swayosd-client --output-volume +2
+bindsym --locked XF86AudioLowerVolume exec \
+    swayosd-client --output-volume -2
+bindsym --locked XF86MonBrightnessUp exec \
+    swayosd-client --brightness +5
+bindsym --locked XF86MonBrightnessDown exec \
+    swayosd-client --brightness -5
 
 # Application shortcuts
 bindsym $mod+w exec /usr/bin/brave

@@ -12,7 +12,10 @@
     "grep": "allow",
     "find": "allow",
     "write": "allow",
-    "edit": "allow"
+    "edit": "allow",
+    "web_search": "allow",
+    "get_search_content": "allow",
+    "fetch_content": "ask"
   },
   "bash": {
     "*": "ask",
@@ -35,7 +38,7 @@
     "git commit *": "ask",
     "git push *": "deny",
     "git pull *": "deny",
-    "uv *": "ask",
+    "uv *": "deny",
     "uv run ruff *": "allow",
     "uv run ty *": "allow",
     "uv run pytest *": "allow",
@@ -46,7 +49,7 @@
     "cargo clippy *": "allow",
     "cargo +nightly clippy *": "allow",
     "cargo test *": "allow",
-    "tofu *": "ask",
+    "tofu *": "deny",
     "tofu plan *": "allow",
     "tofu fmt *": "allow",
     "tofu validate *": "allow",
@@ -61,6 +64,7 @@
   },
   "special": {
     "external_directory": "ask",
-    "external_directory:/home/jp/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent/*": "allow"
+    "external_directory:/home/jp/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent/*": "allow",
+    "external_directory:/tmp/pi-coding-agent/*": "allow"
   }
 }

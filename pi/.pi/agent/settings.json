@@ -13,7 +13,7 @@
     "openrouter/deepseek/deepseek-v4-pro",
     "openrouter/moonshotai/kimi-k3"
   ],
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "packages": [
     "npm:pi-web-access",
     "npm:pi-permission-system",

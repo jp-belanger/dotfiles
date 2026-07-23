@@ -23,14 +23,15 @@
     "allowRead": [
       ".",
       "~/.local",
-      "~/.pi",
+      "~/.pi/agent",
       "~/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent"
     ],
     "allowWrite": [
       ".",
       "/tmp",
       "~/.pi",
-      "~/.cache/uv"
+      "~/.cache/uv",
+      "~/src/gcp/foresight/.git"
     ],
     "denyWrite": [
       ".env",

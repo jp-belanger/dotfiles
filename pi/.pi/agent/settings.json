@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.82.0",
+  "lastChangelogVersion": "0.82.1",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "medium",
@@ -17,7 +17,8 @@
     "npm:pi-web-access",
     "npm:pi-permission-system",
     "git:github.com/carderne/pi-sandbox@d14e15a76b4ae030b07bdd3e6f42732ed3636679",
-    "git:git@github.com:jp-belanger/pi-resources.git"
+    "git:git@github.com:jp-belanger/pi-resources.git",
+    "npm:@plannotator/pi-extension"
   ],
   "showCacheMissNotices": true
 }

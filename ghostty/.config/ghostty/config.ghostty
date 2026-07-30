@@ -9,6 +9,7 @@ font-style-bold-italic = SemiBold
 font-size = 13
 
 resize-overlay = never
+clipboard-paste-protection = false
 
 # Prepare remote SSH sessions with Ghostty's environment and terminfo.
 shell-integration-features = ssh-env,ssh-terminfo

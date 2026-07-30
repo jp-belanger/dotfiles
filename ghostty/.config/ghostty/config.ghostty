@@ -1,0 +1,23 @@
+font-family = JetBrainsMono Nerd Font Mono
+font-family-bold = JetBrainsMono Nerd Font Mono
+font-family-italic = JetBrainsMono Nerd Font Mono
+font-family-bold-italic = JetBrainsMono Nerd Font Mono
+font-style = Regular
+font-style-bold = SemiBold
+font-style-italic = Regular
+font-style-bold-italic = SemiBold
+font-size = 12
+
+background = #111111
+foreground = #e0e0e0
+cursor-color = #e0e0e0
+cursor-text = #111111
+
+palette = 0=#111111
+palette = 1=#cc6666
+palette = 2=#99cc99
+palette = 3=#f8fe7a
+palette = 4=#81a2be
+palette = 5=#b294bb
+palette = 6=#8abeb7
+palette = 7=#e0e0e0

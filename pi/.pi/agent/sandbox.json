@@ -8,7 +8,8 @@
       "github.com",
       "*.github.com",
       "pypi.org",
-      "files.pythonhosted.org"
+      "files.pythonhosted.org",
+      "registry.npmjs.org"
     ],
     "deniedDomains": []
   },
@@ -31,6 +32,7 @@
       "/tmp",
       "~/.pi",
       "~/.cache/uv",
+      "~/.local/share/pnpm",
       "~/src/gcp/foresight/.git"
     ],
     "denyWrite": [

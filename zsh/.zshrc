@@ -118,6 +118,7 @@ alias uvc="uv run ruff check --fix && uv run ruff format && uv run ty check --no
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+export PNPM_HOME="/home/jp/.local/share/pnpm"
 
 # Start ssh-agent
 if [[ -z "$SSH_AUTH_SOCK" ]]; then

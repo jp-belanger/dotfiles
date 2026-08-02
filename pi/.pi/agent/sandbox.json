@@ -9,6 +9,7 @@
       "*.github.com",
       "pypi.org",
       "files.pythonhosted.org",
+      "static.rust-lang.org",
       "registry.npmjs.org"
     ],
     "deniedDomains": []

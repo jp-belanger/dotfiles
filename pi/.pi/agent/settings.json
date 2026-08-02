@@ -10,9 +10,9 @@
     "openai-codex/gpt-5.6-terra",
     "openrouter/deepseek/deepseek-v4-pro",
     "openrouter/moonshotai/kimi-k3",
-    "openrouter/z-ai/glm-5.2"
+    "openrouter/deepseek/deepseek-v4-flash-0731"
   ],
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "packages": [
     "npm:pi-web-access",
     "npm:pi-permission-system",

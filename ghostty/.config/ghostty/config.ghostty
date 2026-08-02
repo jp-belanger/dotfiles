@@ -7,9 +7,13 @@ font-style-bold = SemiBold
 font-style-italic = Regular
 font-style-bold-italic = SemiBold
 font-size = 13
+font-feature = -calt, -liga, -dlig
 
 resize-overlay = never
 clipboard-paste-protection = false
+
+# Pass Ctrl+Enter through instead of toggling fullscreen.
+keybind = ctrl+enter=unbind
 
 # Prepare remote SSH sessions with Ghostty's environment and terminfo.
 shell-integration-features = ssh-env,ssh-terminfo

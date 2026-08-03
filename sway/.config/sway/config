@@ -92,7 +92,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # terminal setup
-set $term ghostty
+set $term ghostty +new-window
 bindsym $mod+Return exec $term
 
 # kill focused window

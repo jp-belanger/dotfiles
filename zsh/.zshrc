@@ -74,6 +74,36 @@ z4h source ~/.env.zsh
 bindkey -v
 bindkey -M viins 'jk' vi-cmd-mode
 
+# Cursor shape follows ZLE vi mode.
+function _set_zle_cursor() {
+  case $KEYMAP in
+    viins|main)
+      print -n -- $'\e[6 q'
+      ;;
+  *)
+      print -n -- $'\e[2 q'
+      ;;
+
+  esac
+}
+
+function zle-keymap-select {
+  _set_zle_cursor
+}
+
+function zle-line-init {
+  zle -K viins
+  _set_zle_cursor
+}
+
+function zle-line-finish {
+  print -n -- $'\e[2 q'
+}
+
+zle -N zle-keymap-select
+zle -N zle-line-init
+zle -N zle-line-finish
+
 z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
 z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
 

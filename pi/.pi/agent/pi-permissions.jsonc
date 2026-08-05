@@ -66,11 +66,10 @@
     "just check-*": "allow",
     "just test *": "allow",
     "python *": "deny",
-    "python3 *": "deny"
-  },
-  "special": {
-    "external_directory": "ask",
-    "external_directory:/home/jp/.local/share/pnpm/store/v11/links/@earendil-works/pi-coding-agent/*": "allow",
-    "external_directory:/tmp/pi-coding-agent/*": "allow"
+    "python3 *": "deny",
+    "pip *": "deny",
+    "pip3 *": "deny",
+    "poetry *": "deny",
+    "poetry3 *": "deny"
   }
 }

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=IBKR TWS (Xephyr)
+Comment=Run TWS in a resizable private Xephyr/Openbox display
+Exec=ib-tws-nested
+Icon=ib-tws
+Terminal=false
+Categories=Office;Finance;
+StartupNotify=false

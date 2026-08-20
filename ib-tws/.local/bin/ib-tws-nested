@@ -1,0 +1,557 @@
+#!/usr/bin/env bash
+# Run Interactive Brokers TWS in a private, resizable Xephyr/Openbox session.
+# After login or resizing, run this script again with --repair.
+
+set -Eeuo pipefail
+
+readonly SCRIPT_SELF="$(readlink -f -- "${BASH_SOURCE[0]}")"
+readonly TWS_SOURCE=/usr/bin/ib-tws
+readonly DISPLAY_FIRST=90
+readonly DISPLAY_LAST=199
+readonly STARTUP_TIMEOUT=10
+readonly REPAIR_TIMEOUT=4
+readonly COMMAND_TIMEOUT=4
+
+RUNTIME_BASE=""
+RUNTIME_DIR=""
+STATE_FILE=""
+AUTHORITY=""
+NESTED_DISPLAY=""
+REAL_HOME=""
+OUTER_DISPLAY=""
+OUTER_XAUTHORITY=""
+XEPHYR_PID=""
+OPENBOX_PID=""
+TWS_PID=""
+TWS_PGID=""
+CLEANED_UP=0
+
+log() {
+    local level=$1
+    shift
+    printf '%s ib-tws-nested[%s]: %s\n' \
+        "$(date '+%Y-%m-%d %H:%M:%S')" "$level" "$*" >&2
+}
+
+die() {
+    log ERROR "$*"
+    return 1
+}
+
+usage() {
+    cat <<'EOF'
+Usage:
+  ib-tws-nested
+  ib-tws-nested --repair
+
+With no arguments, start one private Xephyr/Openbox session containing TWS.
+After TWS finishes logging in, and after any desired resize or output move, run
+"ib-tws-nested --repair" once to fit the TWS frame to the nested display.
+
+Closing either TWS or the "IB TWS host" window stops the complete session.
+EOF
+}
+
+set_runtime_base() {
+    RUNTIME_BASE=${XDG_RUNTIME_DIR:-/tmp/ib-tws-nested-${UID}}
+    STATE_FILE="$RUNTIME_BASE/ib-tws-nested.state"
+}
+
+require_commands() {
+    local program missing=()
+    for program in "$@"; do
+        command -v "$program" >/dev/null 2>&1 || missing+=("$program")
+    done
+    if ((${#missing[@]})); then
+        die "missing required commands: ${missing[*]}"
+        return 1
+    fi
+}
+
+require_launch_environment() {
+    require_commands \
+        bash flock setsid mcookie Xephyr openbox xauth xprop wmctrl xdpyinfo \
+        awk sort timeout chmod mktemp readlink install || return 1
+
+    [[ -r $TWS_SOURCE && -x $TWS_SOURCE ]] || {
+        die "$TWS_SOURCE is not a readable executable"
+        return 1
+    }
+    [[ -n ${DISPLAY:-} ]] || {
+        die "DISPLAY is unset; launch this command from the Sway/Xwayland session"
+        return 1
+    }
+    [[ -n ${HOME:-} ]] || {
+        die "HOME is unset"
+        return 1
+    }
+}
+
+require_repair_environment() {
+    require_commands xprop wmctrl xdpyinfo awk sort timeout readlink || return 1
+}
+
+acquire_instance_lock() {
+    if [[ ! -d $RUNTIME_BASE ]]; then
+        mkdir -m 700 -p -- "$RUNTIME_BASE"
+    fi
+    [[ -O $RUNTIME_BASE && -w $RUNTIME_BASE ]] || {
+        die "runtime base is not owned and writable: $RUNTIME_BASE"
+        return 1
+    }
+
+    exec 9>"$RUNTIME_BASE/ib-tws-nested.lock"
+    if ! flock -n 9; then
+        die "another nested TWS session is already running"
+        return 1
+    fi
+}
+
+create_runtime() {
+    RUNTIME_DIR=$(mktemp -d -- "$RUNTIME_BASE/ib-tws-nested.XXXXXX")
+    chmod 700 "$RUNTIME_DIR"
+    AUTHORITY="$RUNTIME_DIR/Xauthority"
+    install -d -m 700 \
+        "$RUNTIME_DIR/home" \
+        "$RUNTIME_DIR/config/openbox" \
+        "$RUNTIME_DIR/cache" \
+        "$RUNTIME_DIR/data"
+}
+
+write_active_state() {
+    local temporary="$STATE_FILE.$$"
+    (
+        umask 077
+        printf 'runtime=%s\n' "$RUNTIME_DIR"
+        printf 'display=%s\n' "$NESTED_DISPLAY"
+        printf 'authority=%s\n' "$AUTHORITY"
+    ) >"$temporary"
+    chmod 600 "$temporary"
+    mv -f -- "$temporary" "$STATE_FILE"
+}
+
+load_active_state() {
+    local key value runtime="" display="" authority="" canonical
+    set_runtime_base
+
+    [[ -f $STATE_FILE && -O $STATE_FILE && ! -L $STATE_FILE ]] || {
+        die "no active nested TWS session was found"
+        return 1
+    }
+
+    while IFS='=' read -r key value; do
+        case $key in
+            runtime) runtime=$value ;;
+            display) display=$value ;;
+            authority) authority=$value ;;
+            *)
+                die "active-session state contains an unknown field"
+                return 1
+                ;;
+        esac
+    done <"$STATE_FILE"
+
+    [[ $display =~ ^:[0-9]+$ ]] || {
+        die "active-session state contains an invalid display"
+        return 1
+    }
+    [[ $runtime == "$RUNTIME_BASE"/ib-tws-nested.* ]] || {
+        die "active-session runtime is outside $RUNTIME_BASE"
+        return 1
+    }
+    canonical=$(readlink -f -- "$runtime" 2>/dev/null) || {
+        die "active-session runtime no longer exists"
+        return 1
+    }
+    [[ $canonical == "$runtime" && -d $runtime && -O $runtime ]] || {
+        die "active-session runtime failed ownership validation"
+        return 1
+    }
+    [[ $authority == "$runtime/Xauthority" && -f $authority && -O $authority ]] || {
+        die "active-session Xauthority failed validation"
+        return 1
+    }
+
+    RUNTIME_DIR=$runtime
+    NESTED_DISPLAY=$display
+    AUTHORITY=$authority
+}
+
+nested_command() {
+    timeout --foreground "${COMMAND_TIMEOUT}s" env \
+        DISPLAY="$NESTED_DISPLAY" XAUTHORITY="$AUTHORITY" "$@"
+}
+
+create_xauthority() {
+    local display=$1 auth_file=$2 cookie
+    cookie=$(mcookie) || return 1
+    rm -f -- "$auth_file"
+    install -m 600 /dev/null "$auth_file"
+    xauth -f "$auth_file" add \
+        "$display" MIT-MAGIC-COOKIE-1 "$cookie" >/dev/null
+    chmod 600 "$auth_file"
+}
+
+start_xephyr_candidate() {
+    local display=$1
+    local -a arguments=(
+        Xephyr "$display"
+        -auth "$AUTHORITY"
+        -screen 1600x900
+        -resizeable
+        -xinerama
+        -nolisten tcp
+        -no-host-grab
+        -name ib-tws-host
+        -title "IB TWS host"
+    )
+
+    if [[ -n $OUTER_XAUTHORITY ]]; then
+        env DISPLAY="$OUTER_DISPLAY" XAUTHORITY="$OUTER_XAUTHORITY" \
+            "${arguments[@]}" >>"$RUNTIME_DIR/xephyr.log" 2>&1 &
+    else
+        env -u XAUTHORITY DISPLAY="$OUTER_DISPLAY" \
+            "${arguments[@]}" >>"$RUNTIME_DIR/xephyr.log" 2>&1 &
+    fi
+    XEPHYR_PID=$!
+}
+
+wait_for_x_server() {
+    local pid=$1 deadline=$((SECONDS + STARTUP_TIMEOUT))
+    while ((SECONDS < deadline)); do
+        if ! kill -0 "$pid" 2>/dev/null; then
+            wait "$pid" 2>/dev/null || true
+            return 1
+        fi
+        nested_command xdpyinfo >/dev/null 2>&1 && return 0
+        sleep 0.1
+    done
+    return 1
+}
+
+allocate_nested_display() {
+    local number candidate
+    for ((number = DISPLAY_FIRST; number <= DISPLAY_LAST; number++)); do
+        candidate=":$number"
+        [[ -e /tmp/.X11-unix/X$number || -e /tmp/.X${number}-lock ]] && continue
+
+        create_xauthority "$candidate" "$AUTHORITY" || continue
+        NESTED_DISPLAY=$candidate
+        start_xephyr_candidate "$candidate"
+        if wait_for_x_server "$XEPHYR_PID"; then
+            log INFO "nested X server ready on $NESTED_DISPLAY (runtime $RUNTIME_DIR)"
+            return 0
+        fi
+
+        log WARN "Xephyr could not claim $candidate; trying another display"
+        kill "$XEPHYR_PID" 2>/dev/null || true
+        wait "$XEPHYR_PID" 2>/dev/null || true
+        XEPHYR_PID=""
+    done
+
+    die "no nested display available in :$DISPLAY_FIRST..:$DISPLAY_LAST"
+}
+
+openbox_is_ready() {
+    local output
+    output=$(nested_command xprop -root _NET_SUPPORTING_WM_CHECK 2>/dev/null) || return 1
+    [[ $output =~ _NET_SUPPORTING_WM_CHECK\(WINDOW\):[[:space:]]+window[[:space:]]id[[:space:]]#[[:space:]]0x[0-9a-fA-F]+ ]]
+}
+
+wait_for_openbox() {
+    local deadline=$((SECONDS + STARTUP_TIMEOUT))
+    while ((SECONDS < deadline)); do
+        if [[ -n $OPENBOX_PID ]] && ! kill -0 "$OPENBOX_PID" 2>/dev/null; then
+            return 1
+        fi
+        openbox_is_ready && return 0
+        sleep 0.1
+    done
+    return 1
+}
+
+start_openbox() {
+    env \
+        DISPLAY="$NESTED_DISPLAY" \
+        XAUTHORITY="$AUTHORITY" \
+        HOME="$RUNTIME_DIR/home" \
+        XDG_CONFIG_HOME="$RUNTIME_DIR/config" \
+        XDG_CACHE_HOME="$RUNTIME_DIR/cache" \
+        XDG_DATA_HOME="$RUNTIME_DIR/data" \
+        openbox --sm-disable >>"$RUNTIME_DIR/openbox.log" 2>&1 &
+    OPENBOX_PID=$!
+
+    if ! wait_for_openbox; then
+        die "Openbox did not publish _NET_SUPPORTING_WM_CHECK within ${STARTUP_TIMEOUT}s"
+        return 1
+    fi
+    log INFO "Openbox is ready"
+}
+
+create_tws_adapter() {
+    local source=$1 destination=$2 count build
+    build="${destination}.build"
+    count=$(awk '
+        /^[[:space:]]*\/usr\/share\/ib-tws\/jre\/bin\/java([[:space:]]|$)/ { count++ }
+        END { print count + 0 }
+    ' "$source")
+
+    if [[ $count != 1 ]]; then
+        log ERROR "refusing to adapt $source: expected one bundled Java command, found $count"
+        return 1
+    fi
+
+    awk '
+        /^[[:space:]]*\/usr\/share\/ib-tws\/jre\/bin\/java([[:space:]]|$)/ {
+            print "unset _JAVA_AWT_WM_NONREPARENTING AWT_TOOLKIT WAYLAND_DISPLAY"
+        }
+        { print }
+    ' "$source" >"$build"
+    chmod --reference="$source" "$build"
+    mv -f -- "$build" "$destination"
+}
+
+start_tws() {
+    local adapter="$RUNTIME_DIR/ib-tws"
+    create_tws_adapter "$TWS_SOURCE" "$adapter" || return 1
+
+    setsid env \
+        DISPLAY="$NESTED_DISPLAY" \
+        XAUTHORITY="$AUTHORITY" \
+        HOME="$REAL_HOME" \
+        GDK_BACKEND=x11 \
+        XDG_SESSION_TYPE=x11 \
+        "$adapter" >>"$RUNTIME_DIR/tws.log" 2>&1 &
+    TWS_PID=$!
+    TWS_PGID=$TWS_PID
+    log INFO "TWS started; complete login normally in the nested window"
+    log INFO "after login or resize, run: $SCRIPT_SELF --repair"
+}
+
+read_root_geometry() {
+    local output dimensions width height
+    output=$(nested_command xdpyinfo 2>/dev/null) || return 1
+    dimensions=$(awk '/dimensions:/ { print $2; exit }' <<<"$output")
+    [[ $dimensions =~ ^([0-9]+)x([0-9]+)$ ]] || return 1
+    width=${BASH_REMATCH[1]}
+    height=${BASH_REMATCH[2]}
+    ((width > 0 && height > 0)) || return 1
+    printf '%s %s\n' "$width" "$height"
+}
+
+select_main_tws_window() {
+    awk '
+        {
+            class_matches = 0
+            for (i = 7; i <= 8 && i <= NF; i++) {
+                if ($i == "jclient-LoginFrame.jclient-LoginFrame") class_matches = 1
+            }
+            if (class_matches && $NF != "win0" &&
+                $1 ~ /^0x[0-9a-fA-F]+$/ &&
+                $5 ~ /^[0-9]+$/ && $6 ~ /^[0-9]+$/) {
+                print ($5 * $6), $1
+            }
+        }
+    ' | sort -k1,1nr -k2,2 | awk 'NR == 1 { print $2 }'
+}
+
+find_main_tws_window() {
+    local listing xid
+    listing=$(nested_command wmctrl -lGx 2>/dev/null) || return 1
+    xid=$(select_main_tws_window <<<"$listing")
+    [[ $xid =~ ^0x[0-9a-fA-F]+$ ]] || return 1
+    printf '%s\n' "$xid"
+}
+
+window_matches_root() {
+    local xid=$1 width=$2 height=$3 listing
+    listing=$(nested_command wmctrl -lG 2>/dev/null) || return 1
+    awk -v target="$xid" -v width="$width" -v height="$height" '
+        tolower($1) == tolower(target) && $5 == width && $6 == height {
+            found = 1
+        }
+        END { if (!found) exit 1 }
+    ' <<<"$listing"
+}
+
+repair_main_frame() {
+    local width=$1 height=$2 xid="" deadline
+
+    # Login is user-driven; allow a short remap transition, but do not wait
+    # indefinitely when --repair is invoked before the main frame exists.
+    deadline=$((SECONDS + REPAIR_TIMEOUT))
+    while ((SECONDS < deadline)); do
+        if xid=$(find_main_tws_window); then
+            break
+        fi
+        sleep 0.1
+    done
+    [[ -n $xid ]] || {
+        die "main TWS frame was not found; run --repair after TWS finishes logging in"
+        return 1
+    }
+
+    nested_command xprop -id "$xid" -remove WM_NORMAL_HINTS >/dev/null 2>&1 || {
+        die "main TWS frame disappeared while removing stale size hints"
+        return 1
+    }
+    nested_command wmctrl -i -r "$xid" \
+        -b remove,maximized_vert,maximized_horz >/dev/null 2>&1 || {
+        die "could not remove the TWS maximization state"
+        return 1
+    }
+    nested_command wmctrl -i -r "$xid" \
+        -e "0,0,0,${width},${height}" >/dev/null 2>&1 || {
+        die "could not fit the main TWS frame to the nested display"
+        return 1
+    }
+
+    deadline=$((SECONDS + REPAIR_TIMEOUT))
+    while ((SECONDS < deadline)); do
+        window_matches_root "$xid" "$width" "$height" && {
+            log INFO "repair complete: main TWS frame fits ${width}x${height}"
+            return 0
+        }
+        sleep 0.1
+    done
+    die "TWS did not reach ${width}x${height} within ${REPAIR_TIMEOUT}s"
+}
+
+repair_main() {
+    local actual width height
+    [[ $# -eq 0 ]] || {
+        usage >&2
+        return 2
+    }
+    require_repair_environment
+    load_active_state
+
+    actual=$(read_root_geometry) || {
+        die "active nested X server is not responding"
+        return 1
+    }
+    read -r width height <<<"$actual"
+
+    repair_main_frame "$width" "$height"
+}
+
+terminate_pid() {
+    local pid=$1 i
+    [[ $pid =~ ^[0-9]+$ ]] || return 0
+    kill -TERM "$pid" 2>/dev/null || return 0
+    for ((i = 0; i < 30; i++)); do
+        kill -0 "$pid" 2>/dev/null || return 0
+        sleep 0.1
+    done
+    kill -KILL "$pid" 2>/dev/null || true
+}
+
+terminate_group() {
+    local pgid=$1 i
+    [[ $pgid =~ ^[0-9]+$ ]] || return 0
+    kill -TERM -- "-$pgid" 2>/dev/null || return 0
+    for ((i = 0; i < 50; i++)); do
+        kill -0 -- "-$pgid" 2>/dev/null || return 0
+        sleep 0.1
+    done
+    kill -KILL -- "-$pgid" 2>/dev/null || true
+}
+
+cleanup() {
+    local status=${1:-0} state_runtime=""
+    ((CLEANED_UP)) && return 0
+    CLEANED_UP=1
+    trap - EXIT INT TERM HUP
+
+    [[ -n $TWS_PGID ]] && terminate_group "$TWS_PGID"
+    [[ -n $OPENBOX_PID ]] && terminate_pid "$OPENBOX_PID"
+    [[ -n $XEPHYR_PID ]] && terminate_pid "$XEPHYR_PID"
+
+    [[ -n $TWS_PID ]] && wait "$TWS_PID" 2>/dev/null || true
+    [[ -n $OPENBOX_PID ]] && wait "$OPENBOX_PID" 2>/dev/null || true
+    [[ -n $XEPHYR_PID ]] && wait "$XEPHYR_PID" 2>/dev/null || true
+
+    if [[ -n $STATE_FILE && -f $STATE_FILE ]]; then
+        state_runtime=$(awk -F= '$1 == "runtime" { print substr($0, 9); exit }' \
+            "$STATE_FILE" 2>/dev/null || true)
+        [[ $state_runtime == "$RUNTIME_DIR" ]] && rm -f -- "$STATE_FILE"
+    fi
+    [[ -n $RUNTIME_DIR && -d $RUNTIME_DIR ]] && rm -rf -- "$RUNTIME_DIR"
+    log INFO "nested TWS session stopped (status $status)"
+}
+
+wait_for_stack_exit() {
+    local ended="" status
+    set +e
+    wait -n -p ended "$XEPHYR_PID" "$OPENBOX_PID" "$TWS_PID"
+    status=$?
+    set -e
+
+    case $ended in
+        "$TWS_PID")
+            log INFO "TWS exited"
+            return 0
+            ;;
+        "$XEPHYR_PID")
+            log INFO "Xephyr window closed"
+            return 0
+            ;;
+        "$OPENBOX_PID")
+            log ERROR "Openbox exited unexpectedly"
+            if [[ -s $RUNTIME_DIR/openbox.log ]]; then
+                tail -n 40 -- "$RUNTIME_DIR/openbox.log" >&2 || true
+            fi
+            return 1
+            ;;
+        *)
+            log ERROR "an unknown supervised process exited"
+            return 1
+            ;;
+    esac
+}
+
+launch_main() {
+    local status=0
+    [[ $# -eq 0 ]] || {
+        usage >&2
+        return 2
+    }
+
+    set_runtime_base
+    require_launch_environment
+    acquire_instance_lock
+    REAL_HOME=$HOME
+    OUTER_DISPLAY=$DISPLAY
+    OUTER_XAUTHORITY=${XAUTHORITY:-}
+    create_runtime
+    trap 'cleanup $?' EXIT
+    trap 'exit 130' INT
+    trap 'exit 143' TERM HUP
+
+    allocate_nested_display
+    start_openbox
+    write_active_state
+    start_tws
+
+    wait_for_stack_exit || status=$?
+    return "$status"
+}
+
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+    case ${1:-} in
+        --repair)
+            shift
+            repair_main "$@"
+            ;;
+        --help|-h)
+            usage
+            ;;
+        "")
+            launch_main
+            ;;
+        *)
+            usage >&2
+            exit 2
+            ;;
+    esac
+fi

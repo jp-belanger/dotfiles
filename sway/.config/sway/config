@@ -137,6 +137,12 @@ bindsym $mod+w exec /usr/bin/brave
 bindsym $mod+n exec /usr/bin/thunar
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 
+# Interactive Brokers TWS nested X11 session
+bindsym $mod+b exec --no-startup-id ~/.local/bin/ib-tws-nested
+bindsym $mod+Shift+b exec --no-startup-id ~/.local/bin/ib-tws-nested --repair
+for_window [instance="ib-tws-host"] floating enable
+for_window [instance="ib-tws-host"] resize set 1600 900
+
 # set caps lock to ctrl
 input * xkb_options caps:ctrl_modifier
 

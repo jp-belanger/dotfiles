@@ -33,8 +33,7 @@
       "/tmp",
       "~/.pi",
       "~/.cache/uv",
-      "~/.local/share/pnpm",
-      "~/src/gcp/foresight/.git"
+      "~/.local/share/pnpm"
     ],
     "denyWrite": [
       ".env",

@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+xpid=
+wm_pid=
+
+# shellcheck disable=SC2329 # Invoked indirectly by trap.
+cleanup() {
+    set +e
+
+    if [[ -n ${wm_pid:-} ]]; then
+        kill "$wm_pid" 2>/dev/null
+        wait "$wm_pid" 2>/dev/null
+    fi
+
+    if [[ -n ${xpid:-} ]]; then
+        kill "$xpid" 2>/dev/null
+        wait "$xpid" 2>/dev/null
+    fi
+}
+trap cleanup EXIT INT TERM
+
+for command in Xwayland openbox; do
+    if ! command -v "$command" >/dev/null; then
+        printf 'Required command not found: %s\n' "$command" >&2
+        if [[ $command == openbox ]]; then
+            printf 'Install it with: sudo pacman -S --needed openbox\n' >&2
+        fi
+        exit 1
+    fi
+done
+
+if [[ ! -x /usr/bin/ib-tws ]]; then
+    echo '/usr/bin/ib-tws is missing or not executable.' >&2
+    exit 1
+fi
+
+if pgrep -f '/usr/share/ib-tws/jre/bin/java.*jclient.LoginFrame' >/dev/null; then
+    echo 'A TWS instance is already running; stop it before launching another.' >&2
+    exit 1
+fi
+
+# Pick an unused nested X display.
+display_num=
+for n in $(seq 20 99); do
+    if [[ ! -e /tmp/.X11-unix/X$n && ! -e /tmp/.X$n-lock ]]; then
+        display_num=$n
+        break
+    fi
+done
+
+if [[ -z $display_num ]]; then
+    echo 'Could not find a free X display.' >&2
+    exit 1
+fi
+
+display=:$display_num
+
+Xwayland "$display" \
+    -decorate \
+    -hidpi \
+    -geometry 1600x1000 &
+xpid=$!
+
+for _ in $(seq 1 100); do
+    [[ -S /tmp/.X11-unix/X$display_num ]] && break
+
+    if ! kill -0 "$xpid" 2>/dev/null; then
+        echo 'Xwayland exited unexpectedly.' >&2
+        wait "$xpid" || true
+        exit 1
+    fi
+
+    sleep 0.05
+done
+
+if [[ ! -S /tmp/.X11-unix/X$display_num ]]; then
+    echo 'Timed out waiting for Xwayland.' >&2
+    exit 1
+fi
+
+export DISPLAY=$display
+export GDK_BACKEND=x11
+export XDG_SESSION_TYPE=x11
+
+openbox &
+wm_pid=$!
+
+sleep 0.5
+if ! kill -0 "$wm_pid" 2>/dev/null; then
+    echo 'Openbox exited unexpectedly.' >&2
+    wait "$wm_pid" || true
+    exit 1
+fi
+
+set +e
+/usr/bin/ib-tws
+tws_status=$?
+set -e
+
+openbox --exit >/dev/null 2>&1 || true
+wait "$wm_pid" 2>/dev/null || true
+wm_pid=
+
+exit "$tws_status"

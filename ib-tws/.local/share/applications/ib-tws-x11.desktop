@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=IBKR TWS (X11)
 Comment=IBKR Trader Workstation using nested Xwayland and Openbox
-Exec=powerprofilesctl launch --profile power-saver ib-tws-x11
-TryExec=ib-tws-x11
+Exec=powerprofilesctl launch --profile power-saver /home/jp/.local/bin/ib-tws-x11
+TryExec=/home/jp/.local/bin/ib-tws-x11
 Icon=ib-tws
 Terminal=false
 Type=Application

@@ -10,7 +10,8 @@
       "pypi.org",
       "files.pythonhosted.org",
       "static.rust-lang.org",
-      "registry.npmjs.org"
+      "registry.npmjs.org",
+      "*.googleapis.com"
     ],
     "deniedDomains": []
   },
@@ -33,7 +34,9 @@
       "/tmp",
       "~/.pi",
       "~/.cache/uv",
-      "~/.local/share/pnpm"
+      "~/.local/share/pnpm",
+      "~/.config/gcloud",
+      "~/src/gcp/foresight/.git"
     ],
     "denyWrite": [
       ".env",

@@ -1,10 +1,7 @@
 {
   "defaultPolicy": {
-    "tools": "ask",
-    "bash": "ask",
     "mcp": "deny",
-    "skills": "allow",
-    "special": "ask"
+    "skills": "allow"
   },
   "tools": {
     "read": "allow",
@@ -71,5 +68,8 @@
     "pip3 *": "deny",
     "poetry *": "deny",
     "poetry3 *": "deny"
+  },
+  "special": {
+    "external_directory": "allow"
   }
 }

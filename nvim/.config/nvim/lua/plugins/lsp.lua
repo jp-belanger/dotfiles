@@ -16,7 +16,7 @@ return {
         },
       }
 
-      local servers = { "rust_analyzer", "ty", "lua_ls", "ts_ls" }
+      local servers = { "rust_analyzer", "ty", "lua_ls", "ts_ls", "oxlint" }
 
       require("mason").setup()
       require("mason-tool-installer").setup {
@@ -24,8 +24,8 @@ return {
           "stylua",
           "tree-sitter-cli",
           "ruff",
-          "prettier",
-          "prettierd",
+          "oxfmt",
+          "oxlint",
           "rust-analyzer",
           "ty",
           "lua-language-server",
@@ -62,7 +62,7 @@ return {
             client.server_capabilities.semanticTokensProvider = nil
           end
 
-          -- Disable formatting for ts_ls (use prettier via conform instead)
+          -- Disable formatting for ts_ls (use oxfmt via conform instead)
           if client.name == "ts_ls" then
             client.server_capabilities.documentFormattingProvider = false
           end

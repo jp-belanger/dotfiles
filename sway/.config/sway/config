@@ -133,8 +133,8 @@ bindsym --locked XF86MonBrightnessDown exec \
     swayosd-client --brightness -5
 
 # Application shortcuts
-bindsym $mod+w exec /usr/bin/brave
-bindsym $mod+n exec /usr/bin/thunar
+bindsym $mod+w exec brave
+bindsym $mod+n exec thunar
 bindsym $mod+Shift+s exec grim -g "$(slurp)" - | wl-copy
 
 # set caps lock to ctrl

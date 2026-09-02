@@ -47,8 +47,9 @@ zstyle ':z4h:ssh:*' send-extra-files '~/.nanorc' '~/.env.zsh'
 z4h init || return
 
 # Extend PATH.
+export PNPM_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/pnpm"
 typeset -U path
-path=(~/.cargo/bin ~/.local/bin /opt/nvim-linux-x86_64/bin ~/.local/share/pnpm ~/.local/share/pnpm/bin $path)
+path=(~/.cargo/bin ~/.local/bin /opt/nvim-linux-x86_64/bin "$PNPM_HOME" "$PNPM_HOME/bin" $path)
 
 # Export environment variables.
 export GPG_TTY=$TTY
@@ -143,12 +144,6 @@ function ve() {
   fi
 }
 alias uvc="uv run ruff check --fix && uv run ruff format && uv run ty check --no-progress"
-
-# Javascript environment
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-export PNPM_HOME="/home/jp/.local/share/pnpm"
 
 # Start ssh-agent
 if [[ -z "$SSH_AUTH_SOCK" ]]; then

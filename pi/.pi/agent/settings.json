@@ -9,7 +9,7 @@
   ],
   "hideThinkingBlock": true,
   "packages": [
-    "https://github.com:jp-belanger/pi-resources.git",
+    "https://github.com/jp-belanger/pi-resources.git",
     "npm:pi-web-access",
     "npm:pi-permission-system",
     "npm:@plannotator/pi-extension",

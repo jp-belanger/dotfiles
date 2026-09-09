@@ -48,7 +48,7 @@ exec swayosd-server
 
 # workspace layout
 workspace 1 output "BNQ ZOWIE XL LCD CCJ03844SL0" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
-workspace 2 output "BNQ ZOWIE XL LCD CCJ03852SL0" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
+workspace 8 output "BNQ ZOWIE XL LCD CCJ03852SL0" "BNQ BenQ RD280UG EMA2T00079087" eDP-1
 
 # Lid / clamshell handling
 bindswitch --reload --locked lid:on  output eDP-1 disable

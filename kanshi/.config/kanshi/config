@@ -1,25 +1,18 @@
 profile home_desktop {
-    # Top Left Monitor (Zowie 1)
-    output "BNQ ZOWIE XL LCD CCJ03844SL0" {
-        mode 1920x1080@143.996Hz
-        position 0,0
-        scale 1
-    }
-
-    # Top Right Monitor (Zowie 2)
+    # Left portrait monitor
     output "BNQ ZOWIE XL LCD CCJ03852SL0" {
         mode 1920x1080@143.996Hz
-        position 1920,0
+        position 0,0
+        transform 90
         scale 1
     }
 
-    # Bottom Monitor (Samsung Ultrawide)
-    # Spans the entire width of the two top monitors
-    output "Samsung Electric Company C49HG9x HNTR500127" {
-        mode 3840x1080@143.999Hz
-        position 0,1080
+    # Center landscape monitor
+    output "BNQ ZOWIE XL LCD CCJ03844SL0" {
+        mode 1920x1080@143.996Hz
+        position 1080,420
+        transform normal
         scale 1
-        adaptive_sync on
     }
 }
 

@@ -13,7 +13,6 @@
     "https://github.com/jp-belanger/pi-resources.git",
     "npm:pi-web-access",
     "npm:@plannotator/pi-extension",
-    "npm:pi-sandbox",
     "npm:@gotgenes/pi-permission-system"
   ],
   "showCacheMissNotices": true

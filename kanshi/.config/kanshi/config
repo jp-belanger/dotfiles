@@ -1,13 +1,4 @@
 profile home_desktop {
-    # Left portrait monitor
-    output "BNQ ZOWIE XL LCD CCJ03852SL0" {
-        mode 1920x1080@143.996Hz
-        position 0,0
-        transform 90
-        scale 1
-    }
-
-    # Center landscape monitor
     output "BNQ ZOWIE XL LCD CCJ03844SL0" {
         mode 1920x1080@143.996Hz
         position 1080,420

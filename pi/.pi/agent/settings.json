@@ -1,11 +1,12 @@
 {
-  "lastChangelogVersion": "0.84.4",
+  "lastChangelogVersion": "0.85.1",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-sol",
   "defaultThinkingLevel": "high",
   "theme": "dark",
   "enabledModels": [
-    "openai-codex/gpt-5.6-sol"
+    "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-6-astra"
   ],
   "hideThinkingBlock": true,
   "packages": [

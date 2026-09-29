@@ -1,9 +1,11 @@
 profile home_desktop {
-    output "BNQ ZOWIE XL LCD CCJ03844SL0" {
-        mode 1920x1080@143.996Hz
-        position 1080,420
+    output "BNQ BenQ RD280UG *" {
+        enable
+        # Select the highest available refresh rate at native resolution.
+        mode 3840x2560
+        position 0,0
         transform normal
-        scale 1
+        scale 1.5
     }
 }
 

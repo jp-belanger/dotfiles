@@ -9,7 +9,7 @@ profile home_desktop {
 
 profile laptop_dock {
     output eDP-1 disable
-    output "BNQ BenQ RD280UG EMA2T00079087" {
+    output "BNQ BenQ RD280UG *" {
         mode 3840x2560@119.991Hz
         position 0,0
         scale 1.5

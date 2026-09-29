@@ -28,7 +28,7 @@ set $ws9 "9"
 set $ws10 "10"
 
 # screen layout
-exec_always pkill kanshi; exec kanshi
+exec_always 'pkill kanshi; exec kanshi'
 
 # bar
 bar {

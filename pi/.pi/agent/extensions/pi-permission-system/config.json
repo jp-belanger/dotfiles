@@ -4,6 +4,9 @@
   "permissionReviewLog": false,
   "yoloMode": false,
   "forwardingTimeoutMs": 30000,
+  "piInfrastructureReadPaths": [
+    "~/.local/share/pnpm/store/**/@earendil-works/pi-coding-agent/**"
+  ],
   "permission": {
     "*": "ask",
     "mcp": "deny",
@@ -30,6 +33,9 @@
       "head *": "allow",
       "tail *": "allow",
       "printf *": "allow",
+      "sort *": "allow",
+      "true": "allow",
+      "false": "allow",
       "wc *": "allow",
       "git *": "allow",
       "git commit *": "ask",
@@ -76,6 +82,16 @@
       "poetry3 *": "deny",
       "gcloud *": "deny"
     },
-    "external_directory": "ask"
+    "path": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow",
+      "~/.ssh/*": "deny",
+      "*.pem": "deny"
+    },
+    "external_directory": {
+      "*": "ask"
+    }
   }
 }

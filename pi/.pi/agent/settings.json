@@ -1,13 +1,13 @@
 {
-  "lastChangelogVersion": "0.99.1",
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-sol",
-  "defaultThinkingLevel": "high",
+  "lastChangelogVersion": "1.0.2",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-6.1-sol",
+  "defaultThinkingLevel": "low",
   "theme": "dark",
   "enabledModels": [
-    "openai-codex/gpt-6-astra",
-    "openai-codex/gpt-6-sol",
-    "openai-codex/gpt-6-luna"
+    "openai/gpt-6-astra",
+    "openai/gpt-6-luna",
+    "openai/gpt-6.1-sol"
   ],
   "hideThinkingBlock": true,
   "packages": [
@@ -16,5 +16,9 @@
     "npm:@plannotator/pi-extension",
     "npm:@gotgenes/pi-permission-system"
   ],
-  "showCacheMissNotices": true
+  "showCacheMissNotices": true,
+  "deviceId": "b6455c01-258c-4858-91fc-7a590912f1a8",
+  "tuiMode": "regular",
+  "steeringMode": "all",
+  "followUpMode": "all"
 }

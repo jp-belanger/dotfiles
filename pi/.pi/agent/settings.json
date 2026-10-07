@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "1.0.2",
+  "lastChangelogVersion": "1.0.3",
   "defaultProvider": "openai",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "low",
@@ -14,7 +14,8 @@
     "https://github.com/jp-belanger/pi-resources.git",
     "npm:pi-web-access",
     "npm:@plannotator/pi-extension",
-    "npm:@gotgenes/pi-permission-system"
+    "npm:@gotgenes/pi-permission-system",
+    "git:github.com/earendil-works/pi-review"
   ],
   "showCacheMissNotices": true,
   "deviceId": "b6455c01-258c-4858-91fc-7a590912f1a8",

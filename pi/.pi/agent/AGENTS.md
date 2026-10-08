@@ -10,4 +10,4 @@
 
 # Testing
 
-- Use effect/snapshot testing when it benefits the code reader.
+- Use expect/snapshot testing when it benefits the code reader.
